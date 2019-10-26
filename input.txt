@@ -1,0 +1,4 @@
+# START English.log
+San Francisco
+San Jose
+# END English.log

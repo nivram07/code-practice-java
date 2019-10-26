@@ -105,18 +105,18 @@ public class GetWordCountProblemTriesDS {
     }
 
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        int n = in.nextInt();
-        Solution.TrieNode node = new Solution.TrieNode();
-        for(int a0 = 0; a0 < n; a0++){
-            String op = in.next();
-            String contact = in.next();
-            if (op.equals("add")) {
-                Solution.TrieNode.insertWord(node, contact);
-            }
-            if (op.equals("find")) {
-                System.out.println(Solution.TrieNode.getNumberOfWords(node, contact));
-            }
-        }
+//        Scanner in = new Scanner(System.in);
+//        int n = in.nextInt();
+//        Solution.TrieNode node = new Solution.TrieNode();
+//        for(int a0 = 0; a0 < n; a0++){
+//            String op = in.next();
+//            String contact = in.next();
+//            if (op.equals("add")) {
+//                Solution.TrieNode.insertWord(node, contact);
+//            }
+//            if (op.equals("find")) {
+//                System.out.println(Solution.TrieNode.getNumberOfWords(node, contact));
+//            }
+//        }
     }
 }
