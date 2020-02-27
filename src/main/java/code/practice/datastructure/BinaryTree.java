@@ -2,77 +2,81 @@ package code.practice.datastructure;
 
 public class BinaryTree {
 
-    public static void main(String args[]) {
+    private TreeNode root;
 
-        TreeNode sample = new TreeNode(7);
-        TreeNode.addNode(sample, 1);
-        TreeNode.addNode(sample,6);
-        TreeNode.addNode(sample, 5);
-        TreeNode.addNode(sample, 4);
-        TreeNode.addNode(sample, 2);
-
-        System.out.println("Inorder traversal");
-        TreeNode.inorder(sample);
-        System.out.println("PostOrder traversal");
-        TreeNode.postorder(sample);
-        System.out.println("PreOrder traversal");
-        TreeNode.preorder(sample);
+    public BinaryTree(int rootValue) {
+        this.root = new TreeNode(rootValue);
     }
 
-    public static class TreeNode {
-        int data;
-        TreeNode leftChild = null;
-        TreeNode rightChild = null;
-
-        public TreeNode(int data) {
-            this.data = data;
+    public void insert(int value) {
+        if (this.root == null) {
+            this.root = new TreeNode(value);
+        } else {
+            insertNode(this.root, value);
         }
+    }
 
-        public static void addNode(TreeNode root, int data) {
-            if (data <= root.data) {
-                if (root.leftChild == null) {
-                    root.leftChild = new TreeNode(data);
-                } else {
-                    addNode(root.leftChild, data);
-                }
+    private void insertNode(TreeNode source, int valueToInsert) {
+        if (valueToInsert == source.value) {
+            System.out.println("Duplicates not allowed. " + valueToInsert + " is already in the tree.");
+        } else if (valueToInsert < source.value) {
+            if (source.left != null) {
+                insertNode(source.left, valueToInsert);
             } else {
-                if (root.rightChild == null) {
-                    root.rightChild = new TreeNode(data);
-                } else {
-                    addNode(root.rightChild, data);
-                }
+                source.left = new TreeNode(valueToInsert);
+            }
+        } else {
+            if (source.right != null) {
+                insertNode(source.right, valueToInsert);
+            } else {
+                source.right = new TreeNode(valueToInsert);
             }
         }
+    }
 
-        public static void inorder(TreeNode node) {
-            if (node.leftChild != null) {
-                inorder(node.leftChild);
-            }
-            System.out.println(node.data);
-            if (node.rightChild != null) {
-                inorder(node.rightChild);
-            }
-        }
+    public void printInOrderTraversal() {
+        TreeNode iteratorNode = root;
+        inOrderTraversal(iteratorNode);
+    }
 
-        public static void postorder(TreeNode node) {
-            if (node.leftChild != null) {
-                postorder(node.leftChild);
-            }
-            if (node.rightChild != null) {
-                postorder(node.rightChild);
-            }
-            System.out.println(node.data);
-        }
+    public void printPreOrderTraversal() {
+        TreeNode iteratorNode = root;
+        preOrderTraversal(iteratorNode);
+    }
 
-        public static void preorder(TreeNode node) {
-            System.out.println(node.data);
-            if (node.leftChild != null) {
-                preorder(node.leftChild);
-            }
-            if (node.rightChild != null) {
-                preorder(node.rightChild);
-            }
+    public void printPostOrderTraversal() {
+        TreeNode iteratorNode = root;
+        postOrderTraversal(iteratorNode);
+    }
+
+    private void inOrderTraversal(TreeNode node) {
+        if (node.left != null) {
+            inOrderTraversal(node.left);
         }
+        System.out.print(node.value + " ");
+        if (node.right != null) {
+            inOrderTraversal(node.right);
+        }
+    }
+
+    private void preOrderTraversal(TreeNode node) {
+        System.out.print(node.value + " ");
+        if (node.left != null) {
+            preOrderTraversal(node.left);
+        }
+        if (node.right != null) {
+            preOrderTraversal(node.right);
+        }
+    }
+
+    private void postOrderTraversal(TreeNode node) {
+        if (node.left != null) {
+            postOrderTraversal(node.left);
+        }
+        if (node.right != null) {
+            postOrderTraversal(node.right);
+        }
+        System.out.print(node.value + " ");
     }
 
 }
