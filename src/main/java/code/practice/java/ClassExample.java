@@ -1,24 +1,15 @@
 package code.practice.java;
 
+import code.practice.model.Square;
+
 public class ClassExample {
 
     public static void main(String[] args) {
-        Square sq = new Square();
+        Square sq = new Square(2.0);
         sq.print();
     }
 
-    public static class Shape {
-        protected String description = "I'm a shape";
-    }
 
-    public static class Square extends Shape {
-        private String description = "I'm a square";
-
-        public void print() {
-            System.out.println(description);
-            System.out.println(super.description);
-        }
-    }
 
 
 }
