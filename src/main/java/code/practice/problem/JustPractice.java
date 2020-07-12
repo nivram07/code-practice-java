@@ -43,5 +43,23 @@ public class JustPractice {
             ioEx.printStackTrace();
         }
 
+        listExample();
+
+    }
+
+    public static void listExample() {
+        List<Integer> list1 = new ArrayList<>(){{
+            add(1);
+            add(2);
+            add(3);
+            add(4);
+            add(5);
+        }};
+
+        for (int i = 0; i < list1.size(); i++) {
+            if (i == 2) list1.remove(i);
+        }
+
+        System.out.format("%s\n", Arrays.toString(list1.toArray()));
     }
 }

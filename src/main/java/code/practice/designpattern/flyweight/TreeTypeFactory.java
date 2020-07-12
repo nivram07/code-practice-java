@@ -1,27 +1,32 @@
 package code.practice.designpattern.flyweight;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TreeTypeFactory {
 
-  private static TreeTypeFactory treeTypeFactory;
+  private volatile static TreeTypeFactory treeTypeFactory;
 
-  private Map<String, Map<String, Map<String, TreeType>>> cache;
+  private final Map<String, Map<String, Map<String, TreeType>>> cache;
 
   private TreeTypeFactory() {
-    cache = new HashMap<>();
+    cache = new ConcurrentHashMap<>();
   }
 
   public static TreeTypeFactory getInstance() {
-    synchronized (TreeTypeFactory.class) {
-      if (treeTypeFactory == null)
-        treeTypeFactory = new TreeTypeFactory();
+    TreeTypeFactory instance = treeTypeFactory;
+    if (instance == null) {
+        synchronized (TreeTypeFactory.class) {
+          instance = treeTypeFactory;
+          if (instance == null)
+            treeTypeFactory = new TreeTypeFactory();
+            instance = treeTypeFactory;
+        }
     }
-    return treeTypeFactory;
+    return instance;
   }
 
-  public synchronized TreeType getTreeType(String name, String color, String texture) {
+  public TreeType getTreeType(String name, String color, String texture) {
     if (cache.containsKey(name)) {
       Map<String, Map<String, TreeType>> colorMap = cache.get(name);
       if (colorMap.containsKey(color)) {
@@ -34,21 +39,25 @@ public class TreeTypeFactory {
           return treeType;
         }
       } else {
-        Map<String, TreeType> textureMap = new HashMap<>();
+        synchronized (TreeTypeFactory.class) {
+          Map<String, TreeType> textureMap = new ConcurrentHashMap<>();
+          TreeType treeType = new TreeType(name, color, texture);
+          textureMap.put(texture, treeType);
+          colorMap.put(color, textureMap);
+          cache.put(name, colorMap);
+          return treeType;
+        }
+      }
+    } else {
+      synchronized (TreeTypeFactory.class) {
         TreeType treeType = new TreeType(name, color, texture);
+        Map<String, TreeType> textureMap = new ConcurrentHashMap<>();
         textureMap.put(texture, treeType);
+        Map<String, Map<String, TreeType>> colorMap = new ConcurrentHashMap<>();
         colorMap.put(color, textureMap);
         cache.put(name, colorMap);
         return treeType;
       }
-    } else {
-      TreeType treeType = new TreeType(name, color, texture);
-      Map<String, TreeType> textureMap = new HashMap<>();
-      textureMap.put(texture, treeType);
-      Map<String, Map<String, TreeType>> colorMap = new HashMap<>();
-      colorMap.put(color, textureMap);
-      cache.put(name, colorMap);
-      return treeType;
     }
   }
 }

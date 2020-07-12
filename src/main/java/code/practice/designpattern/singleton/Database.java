@@ -1,23 +1,27 @@
 package code.practice.designpattern.singleton;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Database {
   private static Database instance;
-  private Map<String, String> store;
+  private final Map<String, String> store;
   private Database() {
-    store = new HashMap<>();
+    store = new ConcurrentHashMap<>();
   }
 
-  public static Database getInstance() {
+  public synchronized static Database getInstance() {
     if (instance == null) {
       instance = new Database();
     }
     return instance;
   }
 
-  public Map<String, String> getStore() {
-    return this.store;
+  public void put(String key, String value) {
+    store.put(key, value);
+  }
+
+  public String get(String key) {
+    return store.get(key);
   }
 }
